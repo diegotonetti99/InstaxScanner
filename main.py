@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-image_paths = ['foto_sardegna_24.jpg']  # Add your image paths here
+image_paths = ['foto_sardegna_24.png']  # Add your image paths here
 
 def preprocess_image(image_path):
     # Load the image
