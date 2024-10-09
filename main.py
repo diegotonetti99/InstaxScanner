@@ -1,18 +1,24 @@
 import cv2
 import numpy as np
 
-image_paths = ['foto_sardegna_24.png']  # Add your image paths here
+image_paths = ['Images/scan1.png', 'Images/scan2.png']  # Add your image paths here
 
 def preprocess_image(image_path):
     # Load the image
     image = cv2.imread(image_path)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # _, edged = cv2.threshold(gray,210,255,0)
+    edged = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
+                                          cv2.THRESH_BINARY, 31, 5)
+
 
     # Find Canny edges 
-    edged = cv2.Canny(gray, 100, 200, L2gradient=True, apertureSize=7) 
+    # edged = cv2.Canny(gray, 100, 200, L2gradient=True, apertureSize=7) 
+    # edged = cv2.Canny(edged, 100, 200, L2gradient=True, apertureSize=3) 
+    # _, edged = cv2.threshold(edged,0,250,0)
     
     # Find contours in the binary image
-    contours, _ = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    contours, _ = cv2.findContours(edged, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
     edged = cv2.cvtColor(edged, cv2.COLOR_GRAY2BGR)
     cropped_images = []
 
@@ -74,4 +80,4 @@ for image_path in image_paths:
     
     # Optionally, save the cropped images
     for i, cropped in enumerate(cropped_images):
-        cv2.imwrite(f'cropped_{i}_{image_path}', cropped)
+        cv2.imwrite(f'{image_path.replace(".png", "")}_cropped_{i}.png', cropped)
